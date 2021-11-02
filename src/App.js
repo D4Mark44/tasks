@@ -20,27 +20,30 @@ function App() {
     //save task
     var task = document.getElementById("content-task");
 
-    getTask([
-      ...tasks,
-      {
-        id: new Date().getTime(),
-        task: task.value,
-        finish: false,
-      },
-    ]);
-
-    window.localStorage.setItem(
-      "newTasks",
-      JSON.stringify([
+    if (task.value == "") {
+      alert("Adicione alguma tarefa");
+    } else {
+      getTask([
         ...tasks,
         {
           id: new Date().getTime(),
           task: task.value,
           finish: false,
         },
-      ])
-    );
+      ]);
 
+      window.localStorage.setItem(
+        "newTasks",
+        JSON.stringify([
+          ...tasks,
+          {
+            id: new Date().getTime(),
+            task: task.value,
+            finish: false,
+          },
+        ])
+      );
+    }
     setModal(false);
   };
 
@@ -49,15 +52,36 @@ function App() {
       if (val.id == id) {
         val.finish = opt;
       }
+
       return val;
     });
-
     getTask(newTasks);
     window.localStorage.setItem("newTasks", JSON.stringify(newTasks));
   };
 
   const openModal = () => {
     setModal(!modal);
+  };
+
+  // const deletetask = (id) => {
+  //   let newTasks = newTasks.filter(function (val) {
+  //     if (val.id == id) {
+  //       // window.localStorage.removeItem("newTasks", JSON.stringify(id));
+  //       return val;
+  //     }
+  //   });
+  //   getTask(newTasks);
+  // };
+
+  const deletetask = (id) => {
+    let newTasks = tasks.filter(function (val) {
+      if (val.id != id) {
+        return val;
+      } else {
+        window.localStorage.removeItem("newTasks", JSON.stringify(id));
+      }
+    });
+    getTask(newTasks);
   };
 
   useEffect(() => {
@@ -89,17 +113,31 @@ function App() {
           if (!val.finish) {
             return (
               <div className="main-task">
-                <p onClick={() => selectFinish(val.id, true)}>{val.task}</p>
+                <p onClick={() => selectFinish(val.id, true)}>{val.task} </p>
+                <span
+                  onClick={() => deletetask(val.id)}
+                  style={{ color: "red" }}
+                >
+                  (x)
+                </span>
               </div>
             );
           } else {
             return (
-              <p
-                onClick={() => selectFinish(val.id, false)}
-                style={{ textDecoration: "line-through" }}
-              >
-                {val.task}
-              </p>
+              <div className="main-task">
+                <p
+                  onClick={() => selectFinish(val.id, false)}
+                  style={{ textDecoration: "line-through" }}
+                >
+                  {val.task}
+                </p>
+                <span
+                  onClick={() => deletetask(val.id)}
+                  style={{ color: "red" }}
+                >
+                  (x)
+                </span>
+              </div>
             );
           }
         })}

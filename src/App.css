@@ -109,3 +109,12 @@ body {
   background-color: var(--color-secondary);
   color: #fff;
 }
+
+.main-task {
+  display: flex;
+  align-items: center;
+}
+
+.main-task span {
+  cursor: pointer;
+}
