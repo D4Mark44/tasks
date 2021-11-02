@@ -1,6 +1,8 @@
 import "./App.css";
 import { useState, useEffect } from "react";
 
+const PORT = process.env.PORT || 3000;
+
 function App() {
   const [tasks, getTask] = useState([
     // {
@@ -145,5 +147,9 @@ function App() {
     </div>
   );
 }
+
+server.listen(PORT, () =>
+  console.log("servidor iniciado em http://localhost" + PORT)
+);
 
 export default App;
